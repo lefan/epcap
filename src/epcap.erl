@@ -144,16 +144,11 @@ get_switch({filter, Arg})       -> "\"" ++ Arg ++ "\"".
 
 progname() ->
     filename:join([
-            filename:dirname(code:which(?MODULE)),
-            "..",
-            "priv",
+            code:priv_dir(?MODULE),
             ?MODULE
         ]).
 
 chroot_path() ->
     filename:join([
-            filename:dirname(code:which(?MODULE)),
-            "..",
-            "priv",
-            "tmp"
+            code:priv_dir(?MODULE)
         ]).
