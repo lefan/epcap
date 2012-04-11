@@ -111,8 +111,7 @@ main(int argc, char *argv[])
         case 0:
             (void)close(fileno(stdin));
             IS_LTZERO(epcap_init(ep));
-	    VERBOSE(1, "Main: Passed epcap_init!");
-            epcap_loop(ep);
+         epcap_loop(ep);
             break;
         default:
             (void)close(fileno(stdout));
@@ -177,7 +176,7 @@ epcap_init(EPCAP_STATE *ep)
 
     if (pcap_lookupnet(ep->dev, &ipaddr, &ipmask, errbuf) == -1) {
         VERBOSE(1, "%s", errbuf);
-        return (-1);
+	ipmask=PCAP_NETMASK_UNKNOWN;
     }
 
     VERBOSE(2, "[%s] Using filter: %s\n", __progname, ep->filt);
@@ -200,7 +199,6 @@ epcap_init(EPCAP_STATE *ep)
     void
 epcap_loop(EPCAP_STATE *ep)
 {
-  VERBOSE(1, "epcap_loop: in");
     pcap_t *p = ep->p;
     struct pcap_pkthdr *hdr = NULL;
     const u_char *pkt = NULL;
@@ -214,7 +212,6 @@ epcap_loop(EPCAP_STATE *ep)
                 VERBOSE(1, "timeout reading packet");
                 break;
             case 1:     /* got packet */
-	        VERBOSE(1, "got packet");
                 epcap_response(hdr, pkt, datalink);
                 break;
             case -2:    /* eof */
